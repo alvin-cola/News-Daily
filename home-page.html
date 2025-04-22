@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>News Daily</title>
+
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- Your Custom CSS -->
+    <link rel="stylesheet" href="home_page.css">
+
+    <!-- Optional animations -->
+    <style>
+        .news-animate {
+            animation: fadeIn 0.6s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+    <header class="the-header">
+        <div class="left-upper-header">
+            <i class="fa fa-bars" aria-hidden="true"></i>
+            <span class="logo">News Daily</span>
+        </div>
+
+        <div class="middle-upper-header">
+            <nav class="nav-bar">
+                <ul>
+                    <li><a href="#" id="general">Home</a></li>
+                    <li><a href="#" id="world">World</a></li>
+                    <li><a href="#" id="politics">Politics</a></li>
+                    <li><a href="#" id="business">Business</a></li>
+                    <li><a href="#" id="technology">Technology</a></li>
+                    <li><a href="#" id="sport">Sports</a></li>
+                    <li><a href="#" id="entertainment">Entertainment</a></li>
+                </ul>
+            </nav>
+        </div>
+
+        <div class="right-upper-header">
+            <input type="text" id="newsQuery" placeholder="Enter search term">
+            <i class="fa fa-search" aria-hidden="true" id="searchBtn"></i>
+        </div>
+    </header>
+</head>
+
+<body class="main-content">
+
+
+    <!-- News Content Area -->
+    <div class="container mt-4">
+        <div class="row mb-3" id="newsType"></div>
+        <div class="row" id="newsdetails"></div>
+        <div class="row mt-4" id="pagination"></div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer bg-dark text-white text-center py-3 mt-5">
+        <p>&copy; 2025 News Daily. All rights reserved.</p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>

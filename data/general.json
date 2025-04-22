@@ -1,0 +1,20 @@
+[
+    {
+        "title": "President Museveni Launches Digital Economy Strategy",
+        "description": "The Ugandan government has launched a new digital strategy aimed at transforming the country's economy using ICT.",
+        "url": "https://yourwebsite.com/news/museveni-digital-strategy",
+        "urlToImage": "https://yourwebsite.com/images/museveni-digital.jpg"
+    },
+    {
+        "title": "Kampala City Festival Returns After 3 Years",
+        "description": "Thousands flocked to the streets of Kampala to celebrate culture, food, and music in the city's biggest festival.",
+        "url": "https://yourwebsite.com/news/kampala-festival",
+        "urlToImage": "https://yourwebsite.com/images/kampala-festival.jpg"
+    },
+    {
+        "title": "Uganda's Tech Startups Receive $5M Investment",
+        "description": "Several Ugandan startups in FinTech and AgriTech sectors have received funding from international investors.",
+        "url": "https://yourwebsite.com/news/startup-funding",
+        "urlToImage": "https://yourwebsite.com/images/startups.jpg"
+    }
+]
