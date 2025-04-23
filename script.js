@@ -15,13 +15,12 @@ let newsDataArr = [];
 
 window.onload = function () {
     newsType.innerHTML = "<h4>General News</h4>";
-    fetchAllNews();  // Fetch all news at once when the page loads
+    fetchAllNews();
 };
 
-// Event listeners for category buttons
 generalBtn.addEventListener("click", () => {
     newsType.innerHTML = "<h4>General News</h4>";
-    fetchAllNews();  // Fetch all news (merged from all categories)
+    fetchAllNews();
 });
 worldBtn.addEventListener("click", () => setCategory("world", "World News"));
 politicsBtn.addEventListener("click", () => setCategory("politics", "Politics News"));
@@ -55,15 +54,14 @@ function fetchAllNews() {
     const allNewsPromises = categories.map(category => fetchCategoryNews(category));
 
     Promise.all(allNewsPromises).then(allNews => {
-        newsDataArr = allNews.flat();  // Merge all the category news into one array
-        displayNews(newsDataArr);      // Display all mixed news
+        newsDataArr = allNews.flat();
+        displayNews(newsDataArr);
     }).catch(error => {
         console.error("Error loading all news:", error);
         newsdetails.innerHTML = '<div class="card"><div class="card-body">Failed to load news</div></div>';
     });
 }
 
-// Just fetch and return data (DO NOT display here)
 function fetchCategoryNews(category) {
     return fetch(`data/${category}.json`)
         .then(response => response.json())
@@ -73,7 +71,6 @@ function fetchCategoryNews(category) {
         });
 }
 
-
 function displayNews(newsArray = []) {
     newsdetails.innerHTML = '';
 
@@ -82,19 +79,64 @@ function displayNews(newsArray = []) {
         return;
     }
 
-    newsArray.forEach(news => {
-        let newsHTML =
-            `<div class="col-12 mb-2">
-                <div class="d-flex align-items-start bg-light rounded p-2 shadow-sm">
-                    <img src="${news.urlToImage}" alt="News" class="me-2" style="width: 150px; height: 90px; object-fit: cover; border-radius: 8px;">
-                    <div class="flex-grow-1">
-                        <h6 class="mb-1" style="font-size: 1rem; font-weight: 600;">${news.title}</h6>
-                        <p class="mb-1" style="font-size: 0.85rem;">${news.description}</p>
-                        <a href="${news.url}" class="text-primary" style="font-size: 0.85rem;" >Read More</a>
-                    </div>
-                </div>
-            </div>`;
+    // Make the container horizontally scrollable
+    newsdetails.style.display = "flex";
+    newsdetails.style.overflowX = "auto";
+    newsdetails.style.gap = "12px";
+    newsdetails.style.padding = "10px";
+    newsdetails.style.scrollSnapType = "x mandatory";
 
-        newsdetails.innerHTML += newsHTML;
+    newsArray.forEach(news => {
+        const newsCard = document.createElement("div");
+        newsCard.style.flex = "0 0 auto"; // important for horizontal scroll
+        newsCard.style.width = "300px";
+        newsCard.style.background = "#f9f9f9";
+        newsCard.style.borderRadius = "12px";
+        newsCard.style.padding = "10px";
+        newsCard.style.boxShadow = "0 2px 5px rgba(0,0,0,0.1)";
+        newsCard.style.display = "flex";
+        newsCard.style.flexDirection = "column";
+        newsCard.style.scrollSnapAlign = "start";
+
+        const img = document.createElement("img");
+        img.src = news.urlToImage;
+        img.alt = "News";
+        img.style.width = "100%";
+        img.style.height = "150px";
+        img.style.objectFit = "cover";
+        img.style.borderRadius = "8px";
+        img.style.marginBottom = "8px";
+
+        const title = document.createElement("h6");
+        title.innerText = news.title;
+        title.style.fontSize = "1rem";
+        title.style.fontWeight = "600";
+        title.style.margin = "0 0 6px 0";
+
+        const desc = document.createElement("p");
+        desc.innerText = news.description;
+        desc.style.fontSize = "0.85rem";
+        desc.style.margin = "0 0 6px 0";
+        desc.style.color = "#444";
+
+        const link = document.createElement("a");
+        link.href = news.url;
+        link.innerText = "Read More";
+        link.style.fontSize = "0.85rem";
+        link.style.color = "#007bff";
+        link.style.textDecoration = "none";
+
+        link.addEventListener("mouseover", () => link.style.textDecoration = "underline");
+        link.addEventListener("mouseout", () => link.style.textDecoration = "none");
+
+        newsCard.appendChild(img);
+        newsCard.appendChild(title);
+        newsCard.appendChild(desc);
+        newsCard.appendChild(link);
+
+        newsdetails.appendChild(newsCard);
     });
 }
+
+
+
