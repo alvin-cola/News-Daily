@@ -6,75 +6,69 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>News Daily</title>
 
-    <!-- FontAwesome for icons -->
+    <meta name="description" content="Your source for daily news updates." />
+    <meta name="keywords" content="news, world news, politics, business, sports, technology, entertainment" />
+    <meta name="author" content="News Daily" />
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Your Custom CSS -->
     <link rel="stylesheet" href="home_page.css">
-
-    <!-- Optional animations -->
-    <style>
-        .news-animate {
-            animation: fadeIn 0.6s ease-in-out;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-    </style>
-    <header class="the-header">
-        <div class="left-upper-header">
-            <i class="fa fa-bars" aria-hidden="true"></i>
-            <span class="logo">News Daily</span>
-        </div>
-
-        <div class="middle-upper-header">
-            <nav class="nav-bar">
-                <ul>
-                    <li><a href="#" id="general">Home</a></li>
-                    <li><a href="#" id="world">World</a></li>
-                    <li><a href="#" id="politics">Politics</a></li>
-                    <li><a href="#" id="business">Business</a></li>
-                    <li><a href="#" id="technology">Technology</a></li>
-                    <li><a href="#" id="sport">Sports</a></li>
-                    <li><a href="#" id="entertainment">Entertainment</a></li>
-                </ul>
-            </nav>
-        </div>
-
-        <div class="right-upper-header">
-            <input type="text" id="newsQuery" placeholder="Enter search term">
-            <i class="fa fa-search" aria-hidden="true" id="searchBtn"></i>
-        </div>
-    </header>
 </head>
 
-<body class="main-content">
+<body>
+    <header class="header">
+        <div class="header__left">
+            <button class="header__menu-toggle btn btn-light d-lg-none" id="menuToggle" aria-label="Menu">
+                <i class="fa fa-bars" aria-hidden="true"></i>
+            </button>
+            <span class="header__logo">News Daily</span>
+        </div>
 
+        <nav class="header__nav nav-bar">
+            <ul class="nav-bar__list list-unstyled d-flex justify-content-center">
+                <li class="nav-bar__item"><a href="#" id="general" class="nav-bar__link">Home</a></li>
+                <li class="nav-bar__item"><a href="#" id="world" class="nav-bar__link">World</a></li>
+                <li class="nav-bar__item"><a href="#" id="politics" class="nav-bar__link">Politics</a></li>
+                <li class="nav-bar__item"><a href="#" id="business" class="nav-bar__link">Business</a></li>
+                <li class="nav-bar__item"><a href="#" id="technology" class="nav-bar__link">Technology</a></li>
+                <li class="nav-bar__item"><a href="#" id="sport" class="nav-bar__link">Sports</a></li>
+                <li class="nav-bar__item"><a href="#" id="entertainment" class="nav-bar__link">Entertainment</a></li>
+            </ul>
+        </nav>
 
-    <!-- News Content Area -->
-    <div class="container mt-4">
-        <div class="row mb-3" id="newsType"></div>
-        <div class="row" id="newsdetails"></div>
-        <div class="row mt-4" id="pagination"></div>
-    </div>
+        <div class="header__right">
+            <div class="header__search search-bar">
+                <input type="text" id="newsQuery" placeholder="Search..."
+                    class="search-bar__input form-control d-inline-block w-100 w-lg-auto" aria-label="Search News" />
+                <button class="search-bar__button" id="searchBtn" aria-label="Search">
+                    <i class="fa fa-search" aria-hidden="true"></i>
+                </button>
+            </div>
+        </div>
+    </header>
 
-    <!-- Footer -->
-    <footer class="footer bg-dark text-white text-center py-3 mt-5">
-        <p>&copy; 2025 News Daily. All rights reserved.</p>
+    <main class="main-content">
+        <div class="container mt-4">
+            <section class="news-section">
+                <div class="news-section__type" id="newsType">
+                    <h4>General News</h4>
+                </div>
+                <div class="news-section__details" id="newsdetails">
+                </div>
+                <div class="news-section__pagination" id="pagination">
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer__content container text-center py-3">
+            <p class="footer__copyright">&copy; 2025 News Daily. All rights reserved.</p>
+        </div>
     </footer>
 
-    <!-- Scripts -->
     <script src="script.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
         crossorigin="anonymous"></script>

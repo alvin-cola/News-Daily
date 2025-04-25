@@ -6,6 +6,7 @@ const sportsBtn = document.getElementById("sport");
 const entertainmentBtn = document.getElementById("entertainment");
 const technologyBtn = document.getElementById("technology");
 const searchBtn = document.getElementById("searchBtn");
+const menuToggle = document.getElementById("menuToggle");
 
 const newsQuery = document.getElementById("newsQuery");
 const newsType = document.getElementById("newsType");
@@ -13,15 +14,18 @@ const newsdetails = document.getElementById("newsdetails");
 
 let newsDataArr = [];
 
+// Initialize the page with general news
 window.onload = function () {
     newsType.innerHTML = "<h4>General News</h4>";
     fetchAllNews();
 };
 
+// Event listeners for category buttons
 generalBtn.addEventListener("click", () => {
     newsType.innerHTML = "<h4>General News</h4>";
     fetchAllNews();
 });
+
 worldBtn.addEventListener("click", () => setCategory("world", "World News"));
 politicsBtn.addEventListener("click", () => setCategory("politics", "Politics News"));
 businessBtn.addEventListener("click", () => setCategory("business", "Business News"));
@@ -29,114 +33,117 @@ sportsBtn.addEventListener("click", () => setCategory("sports", "Sports News"));
 entertainmentBtn.addEventListener("click", () => setCategory("entertainment", "Entertainment News"));
 technologyBtn.addEventListener("click", () => setCategory("technology", "Technology News"));
 
+// Event listener for search functionality
 searchBtn.addEventListener("click", () => {
     const query = newsQuery.value.trim().toLowerCase();
-    if (query.length === 0) return;
-    const filteredNews = newsDataArr.filter(news =>
-        news.title.toLowerCase().includes(query) ||
-        news.description.toLowerCase().includes(query)
-    );
-    displayNews(filteredNews);
+    if (!query) return; // Prevent empty searches
+    searchNews(query);
 });
 
+// Event listener for mobile menu toggle
+menuToggle.addEventListener("click", () => {
+    const navMenu = document.querySelector(".header__nav .nav-bar__list");
+    navMenu.classList.toggle("nav-bar__list--mobile-active");
+});
+
+// Function to set the news category and fetch news
 function setCategory(category, title) {
     newsType.innerHTML = `<h4>${title}</h4>`;
-    newsdetails.innerHTML = '<div class="card"><div class="card-body">Loading news...</div></div>';
+    newsdetails.innerHTML = '<div class="news-card news-card--loading">Loading news...</div>'; // Show loading state
 
-    fetchCategoryNews(category).then(data => {
-        newsDataArr = data;
-        displayNews(data);
-    });
-}
-
-function fetchAllNews() {
-    const categories = ["general", "world", "politics", "business", "sports", "entertainment", "technology"];
-    const allNewsPromises = categories.map(category => fetchCategoryNews(category));
-
-    Promise.all(allNewsPromises).then(allNews => {
-        newsDataArr = allNews.flat();
-        displayNews(newsDataArr);
-    }).catch(error => {
-        console.error("Error loading all news:", error);
-        newsdetails.innerHTML = '<div class="card"><div class="card-body">Failed to load news</div></div>';
-    });
-}
-
-function fetchCategoryNews(category) {
-    return fetch(`data/${category}.json`)
-        .then(response => response.json())
-        .catch(error => {
+    fetchCategoryNews(category)
+        .then((data) => {
+            newsDataArr = data;
+            displayNews(data);
+        })
+        .catch((error) => {
             console.error(`Error loading ${category} news:`, error);
-            return [];
+            newsdetails.innerHTML = '<div class="news-card news-card--error">Failed to load news. Please try again later.</div>';
         });
 }
 
-function displayNews(newsArray = []) {
-    newsdetails.innerHTML = '';
+// Function to fetch all news categories
+function fetchAllNews() {
+    const categories = ["general", "world", "politics", "business", "sports", "entertainment", "technology"];
+    const allNewsPromises = categories.map((category) => fetchCategoryNews(category));
+
+    Promise.all(allNewsPromises)
+        .then((allNews) => {
+            newsDataArr = allNews.flat();
+            displayNews(newsDataArr);
+        })
+        .catch((error) => {
+            console.error("Error loading all news:", error);
+            newsdetails.innerHTML = '<div class="news-card news-card--error">Failed to load news. Please try again later.</div>';
+        });
+}
+
+// Function to fetch news by category
+function fetchCategoryNews(category) {
+    return fetch(`data/${category}.json`)
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .catch((error) => {
+            console.error(`Error loading ${category} news:`, error);
+            return []; // Return an empty array to avoid breaking the Promise.all
+        });
+}
+
+// Function to search news
+function searchNews(query) {
+    const filteredNews = newsDataArr.filter((news) =>
+        news.title.toLowerCase().includes(query) || news.description.toLowerCase().includes(query)
+    );
+    displayNews(filteredNews);
+}
+
+// Function to display news articles
+function displayNews(newsArray) {
+    newsdetails.innerHTML = ""; // Clear previous news
 
     if (newsArray.length === 0) {
-        newsdetails.innerHTML = '<div class="card"><div class="card-body">No news available</div></div>';
+        newsdetails.innerHTML = '<div class="news-card news-card--empty">No news available.</div>';
         return;
     }
 
-    // Make the container horizontally scrollable
-    newsdetails.style.display = "flex";
-    newsdetails.style.overflowX = "auto";
-    newsdetails.style.gap = "12px";
-    newsdetails.style.padding = "10px";
-    newsdetails.style.scrollSnapType = "x mandatory";
-
-    newsArray.forEach(news => {
-        const newsCard = document.createElement("div");
-        newsCard.style.flex = "0 0 auto"; // important for horizontal scroll
-        newsCard.style.width = "300px";
-        newsCard.style.background = "#f9f9f9";
-        newsCard.style.borderRadius = "12px";
-        newsCard.style.padding = "10px";
-        newsCard.style.boxShadow = "0 2px 5px rgba(0,0,0,0.1)";
-        newsCard.style.display = "flex";
-        newsCard.style.flexDirection = "column";
-        newsCard.style.scrollSnapAlign = "start";
+    const newsCards = newsArray.map((news) => {
+        const card = document.createElement("article");
+        card.classList.add("news-card");
 
         const img = document.createElement("img");
         img.src = news.urlToImage;
-        img.alt = "News";
-        img.style.width = "100%";
-        img.style.height = "150px";
-        img.style.objectFit = "cover";
-        img.style.borderRadius = "8px";
-        img.style.marginBottom = "8px";
+        img.alt = news.title; // Use title as alt text (improve if possible)
+        img.classList.add("news-card__image");
 
-        const title = document.createElement("h6");
-        title.innerText = news.title;
-        title.style.fontSize = "1rem";
-        title.style.fontWeight = "600";
-        title.style.margin = "0 0 6px 0";
+        const content = document.createElement("div");
+        content.classList.add("news-card__content");
 
-        const desc = document.createElement("p");
-        desc.innerText = news.description;
-        desc.style.fontSize = "0.85rem";
-        desc.style.margin = "0 0 6px 0";
-        desc.style.color = "#444";
+        const title = document.createElement("h2");
+        title.textContent = news.title;
+        title.classList.add("news-card__title");
+
+        const description = document.createElement("p");
+        description.textContent = news.description;
+        description.classList.add("news-card__description");
 
         const link = document.createElement("a");
         link.href = news.url;
-        link.innerText = "Read More";
-        link.style.fontSize = "0.85rem";
-        link.style.color = "#007bff";
-        link.style.textDecoration = "none";
+        link.textContent = "Read More";
+        link.classList.add("news-card__link");
 
-        link.addEventListener("mouseover", () => link.style.textDecoration = "underline");
-        link.addEventListener("mouseout", () => link.style.textDecoration = "none");
+        content.appendChild(title);
+        content.appendChild(description);
+        content.appendChild(link);
 
-        newsCard.appendChild(img);
-        newsCard.appendChild(title);
-        newsCard.appendChild(desc);
-        newsCard.appendChild(link);
+        card.appendChild(img);
+        card.appendChild(content);
 
-        newsdetails.appendChild(newsCard);
+        return card;
     });
+
+    newsdetails.append(...newsCards);
 }
-
-
-
